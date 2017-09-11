@@ -42,6 +42,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $GOPATH/.app.json)")
 	RootCmd.AddCommand(cmdLocale)
+	RootCmd.AddCommand(addLocale)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -65,8 +66,8 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintf(color, "%sUsing config file: " + cfgFile, "\x1b[32m")
+		fmt.Fprintf(color, "%sUsing config file: " + cfgFile + "%s\n", "\x1b[32m", "\x1b[0m")
 	} else{
-		fmt.Fprintf(color, "%sNot found configuration file : " + cfgFile, "\x1b[31m")
+		fmt.Fprintf(color, "%sNot found configuration file : " + cfgFile + "%s\n", "\x1b[31m", "\x1b[0m")
 	}
 }

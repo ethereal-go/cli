@@ -8,7 +8,7 @@ import (
 	"runtime"
 )
 
-var addLocale = &cobra.Command{
+var cmdAdd = &cobra.Command{
 	Aliases: []string{"make"},
 	Use:     "add",
 	Short:   "Add or create files(or anything else)",

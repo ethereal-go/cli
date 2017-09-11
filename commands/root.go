@@ -1,17 +1,26 @@
 package commands
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/ethereal-go/ethereal/root/i18n"
+	"github.com/ethereal-go/ethereal/utils"
 	"github.com/mitchellh/go-homedir"
+	"github.com/shiena/ansicolor"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
-	"github.com/shiena/ansicolor"
 	"io"
+	"io/ioutil"
+	"os"
 )
 
 var cfgFile string
+var pathFileLanguage string
 var color io.Writer
+
+//var locale map[string]map[string]string
+
+var locale i18n.StorageLocale
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -35,13 +44,13 @@ func CliExecute() {
 }
 
 func init() {
-	color  = ansicolor.NewAnsiColorWriter(os.Stdout)
-	cobra.OnInitialize(initConfig)
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $GOPATH/.app.json)")
-
+	color = ansicolor.NewAnsiColorWriter(os.Stdout)
+	cobra.OnInitialize(initConfig, initPathFileLanguage)
+	cmdLocale.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $GOPATH/.app.json)")
+	cmdLocale.PersistentFlags().StringVar(&pathFileLanguage, "source", "", "path to file with text language")
 
 	RootCmd.AddCommand(cmdLocale)
-	RootCmd.AddCommand(addLocale)
+	RootCmd.AddCommand(cmdAdd)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -65,8 +74,29 @@ func initConfig() {
 	viper.AutomaticEnv() // read in environment variables that match
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintf(color, "%sUsing config file: " + cfgFile + "%s\n", "\x1b[32m", "\x1b[0m")
-	} else{
-		fmt.Fprintf(color, "%sNot found configuration file : " + cfgFile + "%s\n", "\x1b[31m", "\x1b[0m")
+		fmt.Fprintf(color, "%sUsing config file: %s %s\n", "\x1b[32m", cfgFile, "\x1b[0m")
+	} else {
+		fmt.Fprintf(color, "%sNot found configuration file : %s %s\n", "\x1b[31m", cfgFile, "\x1b[0m")
 	}
+
+}
+
+// initConfig reads in file with language
+func initPathFileLanguage() {
+	if utils.FileExists(pathFileLanguage) {
+		file, err := ioutil.ReadFile(pathFileLanguage)
+		if err != nil {
+			fmt.Fprintf(color, "%s %s %s\n", "\x1b[31m", err, "\x1b[0m")
+		}
+
+		err = json.Unmarshal(file, &locale.Structure)
+		if err != nil {
+			fmt.Fprintf(color, "%s %s %s\n", "\x1b[31m", err, "\x1b[0m")
+		}
+
+		fmt.Fprintf(color, "%sUsing file i18n: %s %s\n", "\x1b[32m", pathFileLanguage, "\x1b[0m")
+	} else {
+		fmt.Fprintf(color, "%sPath to file with language text not found : %s %s\n", "\x1b[31m", pathFileLanguage, "\x1b[0m")
+	}
+
 }

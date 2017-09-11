@@ -17,9 +17,6 @@ import (
 var cfgFile string
 var pathFileLanguage string
 var color io.Writer
-
-//var locale map[string]map[string]string
-
 var locale i18n.StorageLocale
 
 // RootCmd represents the base command when called without any subcommands
@@ -66,7 +63,7 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".seeCobraTest" (without extension).
+		// Search config in home directory with name ".app" (without extension).
 		viper.AddConfigPath(home)
 		viper.SetConfigName(".app")
 	}

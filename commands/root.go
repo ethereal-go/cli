@@ -1,20 +1,23 @@
 package commands
 
 import (
-	"github.com/spf13/cobra"
 	"fmt"
-	"os"
-	"github.com/spf13/viper"
 	"github.com/mitchellh/go-homedir"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"os"
+	"github.com/shiena/ansicolor"
+	"io"
 )
 
 var cfgFile string
+var color io.Writer
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "cli",
 	Short: "CLI your application",
-	Long:`
+	Long: `
 ╔═══╗ ╔════╗ ╔╗╔╗ ╔═══╗ ╔═══╗ ╔═══╗ ╔══╗ ╔╗
 ║╔══╝ ╚═╗╔═╝ ║║║║ ║╔══╝ ║╔═╗║ ║╔══╝ ║╔╗║ ║║
 ║╚══╗   ║║   ║╚╝║ ║╚══╗ ║╚═╝║ ║╚══╗ ║╚╝║ ║║
@@ -35,13 +38,9 @@ func CliExecute() {
 }
 
 func init() {
+	color  = ansicolor.NewAnsiColorWriter(os.Stdout)
 	cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.seeCobraTest.yaml)")
-
+	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $GOPATH/.app.json)")
 	RootCmd.AddCommand(cmdLocale)
 }
 
@@ -60,15 +59,14 @@ func initConfig() {
 
 		// Search config in home directory with name ".seeCobraTest" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".seeCobraTest")
+		viper.SetConfigName(".app")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
 
-	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		fmt.Fprintf(color, "%sUsing config file: " + cfgFile, "\x1b[32m")
+	} else{
+		fmt.Fprintf(color, "%sNot found configuration file : " + cfgFile, "\x1b[31m")
 	}
 }
-
-

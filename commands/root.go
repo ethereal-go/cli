@@ -25,11 +25,8 @@ var RootCmd = &cobra.Command{
 ║╚══╗   ║║   ║║║║ ║╚══╗ ║║║║  ║╚══╗ ║║║║ ║╚═╗
 ╚═══╝   ╚╝   ╚╝╚╝ ╚═══╝ ╚╝╚╝  ╚═══╝ ╚╝╚╝ ╚══╝
 	`,
-	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func CliExecute() {
 	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -41,6 +38,8 @@ func init() {
 	color  = ansicolor.NewAnsiColorWriter(os.Stdout)
 	cobra.OnInitialize(initConfig)
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $GOPATH/.app.json)")
+
+
 	RootCmd.AddCommand(cmdLocale)
 	RootCmd.AddCommand(addLocale)
 }

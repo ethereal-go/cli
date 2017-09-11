@@ -9,10 +9,11 @@ import (
 )
 
 var addLocale = &cobra.Command{
+	Aliases: []string{"make"},
 	Use:     "add",
 	Short:   "Add or create files(or anything else)",
 	Long:    ``,
-	Example: "add config $GOPATH/src/...",
+	Example: "add config $GOPATH/src/... (where is your project)",
 	Args:    cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		var nameConfFile = "app.json"

@@ -42,9 +42,10 @@ func CliExecute() {
 
 func init() {
 	color = ansicolor.NewAnsiColorWriter(os.Stdout)
-	cobra.OnInitialize(initConfig, initPathFileLanguage)
-	cmdLocale.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $GOPATH/.app.json)")
-	cmdLocale.PersistentFlags().StringVar(&pathFileLanguage, "source", "", "path to file with text language")
+	//cobra.OnInitialize(initConfig, initPathFileLanguage)
+
+	cmdLocale.Flags().StringVar(&cfgFile, "config", "", "config file (default is $GOPATH/.app.json)")
+	cmdLocale.Flags().StringVar(&pathFileLanguage, "source", "", "path to file with text language")
 
 	RootCmd.AddCommand(cmdLocale)
 	RootCmd.AddCommand(cmdAdd)

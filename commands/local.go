@@ -13,7 +13,8 @@ var cmdLocale = &cobra.Command{
 	Short: "Localization management",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-
+		initConfig()
+		initPathFileLanguage()
 		arg := args[0]
 		switch arg {
 		case "fill":

@@ -14,10 +14,18 @@ import (
 	"os"
 )
 
+// configuration file
 var cfgFile string
+
+// path to file locale
 var pathFileLanguage string
-var color io.Writer
+
+// structure locale
 var locale i18n.StorageLocale
+
+// flag type database
+var database string
+var color io.Writer
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -46,6 +54,7 @@ func init() {
 
 	cmdLocale.Flags().StringVar(&cfgFile, "config", "", "config file (default is $GOPATH/.app.json)")
 	cmdLocale.Flags().StringVar(&pathFileLanguage, "source", "", "path to file with text language")
+	cmdLocale.Flags().StringVar(&database, "database", "", "type database(mysql,postgres,sqlite3,sqlServer)")
 
 	RootCmd.AddCommand(cmdLocale)
 	RootCmd.AddCommand(cmdAdd)

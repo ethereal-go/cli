@@ -2,9 +2,9 @@ package commands
 
 import (
 	"fmt"
+	pkgDatabase "github.com/ethereal-go/ethereal/root/database"
+	"github.com/ethereal-go/ethereal/root/i18n/storage"
 	"github.com/spf13/cobra"
-	"github.com/ethereal-go/ethereal/root/i18n/storage/mysql"
-	"github.com/spf13/viper"
 )
 
 var cmdLocale = &cobra.Command{
@@ -18,11 +18,14 @@ var cmdLocale = &cobra.Command{
 		arg := args[0]
 		switch arg {
 		case "fill":
-			storage := mysql.LocaleStorageMysql{}.EstablishConnection(map[string]string{
-				"login" : viper.GetString("database.login"),
-				"password":viper.GetString("database.password"),
-				"name":viper.GetString("database.name"),
-			})
+			db, err := pkgDatabase.FactoryDatabase(database)
+			if err != nil {
+				fmt.Fprintf(color, "%s%s%s\n", "\x1b[31m", err, "\x1b[0m")
+			}
+
+			gorm := db.Parse().Connection()
+
+			storage := storage.LocaleStorage{}.EstablishConnection(gorm)
 			storage.Add(locale)
 			fmt.Fprintf(color, "%sSuccess fill locale in database! Good job!  %s\n", "\x1b[32m", "\x1b[0m")
 		default:

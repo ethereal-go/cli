@@ -105,5 +105,4 @@ func initPathFileLanguage() {
 	} else {
 		fmt.Fprintf(color, "%sPath to file with language text not found : %s %s\n", "\x1b[31m", pathFileLanguage, "\x1b[0m")
 	}
-
 }

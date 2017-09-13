@@ -11,7 +11,10 @@ var cmdLocale = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Use:   "locale",
 	Short: "Localization management",
-	Long:  ``,
+	Long:  `
+Flags :
+	- fill : Fill your source with the localization from the file
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		initConfig()
 		initPathFileLanguage()

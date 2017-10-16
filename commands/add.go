@@ -36,8 +36,8 @@ var cmdAdd = &cobra.Command{
 			}
 		case "env":
 			if utils.DirExist(NewPath) {
-				utils.Copy(NewPath+nameConfFile, path.Dir(filename)+"/../stubs/config/"+envName)
-				fmt.Fprintf(color, "%sCreate default configuration file : %s %s\n", "\x1b[32m", "\x1b[0m", NewPath+nameConfFile)
+				utils.Copy(NewPath+envName, path.Dir(filename)+"/../stubs/config/"+envName)
+				fmt.Fprintf(color, "%sCreate default env file : %s %s\n", "\x1b[32m", "\x1b[0m", NewPath+envName)
 			} else {
 				fmt.Fprintf(color, "%sDirectory %s is not exist.%s\n", "\x1b[31m", NewPath, "\x1b[0m")
 			}

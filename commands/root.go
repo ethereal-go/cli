@@ -14,6 +14,8 @@ import (
 	"os"
 )
 
+const rootCommand = "cli"
+
 // configuration file
 var cfgFile string
 
@@ -29,7 +31,7 @@ var color io.Writer
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   "cli",
+	Use:   rootCommand,
 	Short: "CLI your application",
 	Long: `
 ╔═══╗ ╔════╗ ╔╗╔╗ ╔═══╗ ╔═══╗ ╔═══╗ ╔══╗ ╔╗
